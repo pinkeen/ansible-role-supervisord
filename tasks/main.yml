@@ -17,7 +17,11 @@
 - name: Install supervisord service file (systemd)
   copy: src=systemd/supervisord.service dest=/etc/systemd/system/supervisord.service mode=0755
   when: ansible_distribution_major_version == "7"
-  notify: Reload daemons
+  register: service_file
+
+- name: Reload daemon
+  command: /bin/systemctl daemon-reload
+  when: servic_files.changed is defined and service_file.changed
 
 - name: Create supervisord log directory
   file:

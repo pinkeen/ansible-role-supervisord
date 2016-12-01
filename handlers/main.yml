@@ -1,6 +1,3 @@
-- name: Reload daemons
-  command: /bin/systemctl daemon-reload
-
 - name: Reload supervisord
   service: name=supervisord state=reloaded
 
