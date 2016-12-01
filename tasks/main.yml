@@ -10,8 +10,14 @@
     state: directory
 
 # Supervisor from pip doesn't have an init script so we need to install it.
-- name: Install supervisord init script
+- name: Install supervisord init script (sysvinit)
   copy: src=init.d/supervisord dest=/etc/init.d/supervisord mode=0755
+  when: ansible_distribution_major_version == "6"
+
+- name: Install supervisord service file (systemd)
+  copy: src=systemd/supervisord.service dest=/etc/systemd/system/supervisord.service mode=0755
+  when: ansible_distribution_major_version == "7"
+  notify: Reload daemons
 
 - name: Create supervisord log directory
   file:
