@@ -21,7 +21,7 @@
 
 - name: Reload daemon
   command: /bin/systemctl daemon-reload
-  when: servic_files.changed is defined and service_file.changed
+  when: service_file.changed is defined and service_file.changed
 
 - name: Create supervisord log directory
   file:
