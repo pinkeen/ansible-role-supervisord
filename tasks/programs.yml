@@ -12,4 +12,14 @@
   with_items: "{{ svd_programs }}"
   notify: Reload supervisord
 
+- name: List installed supervisord program configs
+  shell: ls -1 /etc/supervisord.d/ | grep '\.conf$' | sed 's/.....$//'
+  register: supervisord_program_files
+
+- name: Ensure only configured supervisord programs are installed
+  file:
+    name: "/etc/supervisord.d/{{ item }}.conf"
+    state: absent
+  with_items: "{{ supervisord_program_files.stdout_lines }}"
+  when: item not in svd_programs|map(attribute='name')
 
